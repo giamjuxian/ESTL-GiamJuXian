@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import morgan from "morgan";
 import userRouter from "./router/user";
 import { handleError } from "./error";
+import { db } from "./database/database";
 
 const app = express();
 const PORT = process.env.PORT || 8080;

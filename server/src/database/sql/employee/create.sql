@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS Employees CASCADE;
+
+CREATE TABLE Employees (
+    id TEXT PRIMARY KEY,
+    login TEXT,
+    name TEXT,
+    salary DECIMAL(10,2),
+    UNIQUE(login) DEFERRABLE INITIALLY IMMEDIATE
+);

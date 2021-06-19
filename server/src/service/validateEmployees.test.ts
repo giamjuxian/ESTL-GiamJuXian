@@ -1,14 +1,16 @@
+import { Employee } from "../database/model/employee";
 import {
   DUPLICATE_ID,
   DUPLICATE_LOGIN,
+  SALARY_INVALID,
   SALARY_NEGATIVE,
   SALARY_WRONG_DECIMAL,
   validateEmployees,
 } from "./validateEmployees";
 
 describe("validateEmployees", () => {
-  it("validates a valid array of employees", async () => {
-    const employees = [
+  it("converts a valid array of employees", async () => {
+    const data: Employee[] = [
       {
         id: "e0001",
         login: "hpotter",
@@ -28,11 +30,12 @@ describe("validateEmployees", () => {
         salary: "4000.00",
       },
     ];
-    expect(validateEmployees(employees)).toBe(true);
+
+    expect(validateEmployees(data)).toBe(true);
   });
 
   it("throws error for duplicate IDs", async () => {
-    const employees = [
+    const data: Employee[] = [
       {
         id: "e0001",
         login: "hpotter",
@@ -52,11 +55,11 @@ describe("validateEmployees", () => {
         salary: "4000.00",
       },
     ];
-    expect(() => validateEmployees(employees)).toThrowError(DUPLICATE_ID);
+    expect(() => validateEmployees(data)).toThrowError(DUPLICATE_ID);
   });
 
   it("throws error for duplicate logins", async () => {
-    const employees = [
+    const data: Employee[] = [
       {
         id: "e0001",
         login: "hpotter",
@@ -76,11 +79,34 @@ describe("validateEmployees", () => {
         salary: "4000.00",
       },
     ];
-    expect(() => validateEmployees(employees)).toThrowError(DUPLICATE_LOGIN);
+    expect(() => validateEmployees(data)).toThrowError(DUPLICATE_LOGIN);
+  });
+
+  it("throws error for invalid salary string", async () => {
+    const invalidData1: Employee[] = [
+      {
+        id: "e0001",
+        login: "hpotter",
+        name: "Harry Potter",
+        salary: "12.34.00",
+      },
+    ];
+
+    const invalidData2: Employee[] = [
+      {
+        id: "e0001",
+        login: "hpotter",
+        name: "Harry Potter",
+        salary: ".00",
+      },
+    ];
+
+    expect(() => validateEmployees(invalidData1)).toThrowError(SALARY_INVALID);
+    expect(() => validateEmployees(invalidData2)).toThrowError(SALARY_INVALID);
   });
 
   it("throws error for negative salary", async () => {
-    const employees = [
+    const data: Employee[] = [
       {
         id: "e0001",
         login: "hpotter",
@@ -100,11 +126,11 @@ describe("validateEmployees", () => {
         salary: "4000.00",
       },
     ];
-    expect(() => validateEmployees(employees)).toThrowError(SALARY_NEGATIVE);
+    expect(() => validateEmployees(data)).toThrowError(SALARY_NEGATIVE);
   });
 
   it("throws error for negative salary", async () => {
-    const noDecimals = [
+    const noDecimals: Employee[] = [
       {
         id: "e0001",
         login: "hpotter",
@@ -113,7 +139,7 @@ describe("validateEmployees", () => {
       },
     ];
 
-    const moreDecimals = [
+    const moreDecimals: Employee[] = [
       {
         id: "e0001",
         login: "hpotter",
@@ -122,7 +148,7 @@ describe("validateEmployees", () => {
       },
     ];
 
-    const lessDecimals = [
+    const lessDecimals: Employee[] = [
       {
         id: "e0001",
         login: "hpotter",
@@ -131,7 +157,7 @@ describe("validateEmployees", () => {
       },
     ];
 
-    const zeroWithNoDecimals = [
+    const zeroWithNoDecimals: Employee[] = [
       {
         id: "e0001",
         login: "hpotter",

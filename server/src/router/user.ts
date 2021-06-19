@@ -1,6 +1,5 @@
 import express from "express";
 import multer from "multer";
-
 import { HttpError } from "../error";
 import { parseCSVFile } from "../service/parseCSVFile";
 import { validateEmployees } from "../service/validateEmployees";
@@ -30,12 +29,5 @@ const uploadEmployees = async (path: string) => {
   validateEmployees(employees);
   return employees;
 };
-
-export interface Employee {
-  id: string;
-  login: string;
-  name: string;
-  salary: string;
-}
 
 export default router;

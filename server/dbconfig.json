@@ -1,0 +1,14 @@
+{
+  "development": {
+    "host": "localhost",
+    "port": 5432,
+    "database": "estl",
+    "user": "root"
+  },
+  "test": {
+    "host": "localhost",
+    "port": 5432,
+    "database": "estl-test",
+    "user": "root"
+  }
+}

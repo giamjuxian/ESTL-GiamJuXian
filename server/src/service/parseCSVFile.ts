@@ -1,7 +1,7 @@
 import fs from "fs";
 import parse from "csv-parse";
 import { HttpError } from "../error";
-import { Employee } from "../router/user";
+import { Employee } from "../database/model/employee";
 
 export const EMPTY_CSV = "File provided is empty";
 
