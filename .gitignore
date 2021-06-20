@@ -9,3 +9,4 @@ node_modules/
 # Build files from Typescript
 dist
 uploads
+build

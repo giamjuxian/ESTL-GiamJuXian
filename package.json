@@ -1,0 +1,11 @@
+{
+  "name": "estl",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/giamjuxian/ESTL-GiamJuXian.git",
+  "author": "Ju Xian Giam <giamjuxian@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "(cd client && yarn run build) && (cd server && yarn start)"
+  }
+}
