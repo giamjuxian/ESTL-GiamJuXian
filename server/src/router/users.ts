@@ -35,15 +35,19 @@ router.post(
 
 router.get("/", async (req, res, next) => {
   const { minSalary, maxSalary, offset, limit, sort } = req.query;
-  console.log(minSalary, maxSalary, offset, limit, sort);
 
   try {
+    let sortFixed;
+    if (sort && sort[0] === " ") {
+      sortFixed = "+" + (sort as string).slice(1);
+    }
+
     const options = {
       minSalary: minSalary ? parseFloat(minSalary as string) : undefined,
       maxSalary: maxSalary ? parseFloat(maxSalary as string) : undefined,
       offset: offset ? parseInt(offset as string) : undefined,
       limit: limit ? parseInt(limit as string) : undefined,
-      sort: sort ? (sort as string) : undefined,
+      sort: sortFixed ? sortFixed : undefined,
     };
     const employees: Employee[] = await getEmployees(options);
     res.json({ success: true, status: 200, results: employees });
