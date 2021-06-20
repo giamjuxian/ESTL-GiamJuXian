@@ -1,16 +1,20 @@
-import React from 'react'
-import logo from './logo.svg'
-import './App.css'
+import React from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import SideBar from "./components/SideBar";
+import TopBar from "./components/TopBar";
+import MainPage from "./MainPage";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
+import "./icon.ts";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Edit and save to reload.</p>
-      </header>
+    <div className="app_container">
+      <TopBar />
+      <SideBar />
+      <MainPage />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
