@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import morgan from "morgan";
-import userRouter from "./router/user";
+import userRouter from "./router/users";
 import { handleError } from "./error";
 import { db } from "./database/database";
 
@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use(morgan("dev"));
 
 // User router for all upload functions
-app.use("/user", userRouter);
+app.use("/users", userRouter);
 
 // Handle all errors with this handler
 app.use(handleError);

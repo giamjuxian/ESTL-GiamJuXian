@@ -6,7 +6,8 @@ import { Employee } from "../database/model/employee";
 export const EMPTY_CSV = "File provided is empty";
 
 /**
- * Takes in a file path of a CSV file and parse it into employee objects
+ * Takes in a file path of a CSV file and parse it into an array
+ * of employee objects.
  */
 export const parseCSVFile = async (
   path: string,

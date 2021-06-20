@@ -7,7 +7,12 @@ export const SALARY_INVALID = "Invalid salary string provided";
 export const SALARY_NEGATIVE = "Contains salary with value less than 0.";
 export const SALARY_WRONG_DECIMAL =
   "Contains salary with value not in two decimal places";
+export const validSalaryRegex = /^[+-]?((\d+(\.\d*)?))$/;
 
+/**
+ * Validates all employee attributes in an array of employee. Throws an
+ * error if the validation fails.
+ */
 export const validateEmployees = (data: Employee[]): boolean => {
   const idMap = {};
   const loginMap = {};

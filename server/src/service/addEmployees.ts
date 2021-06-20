@@ -1,8 +1,13 @@
-import { db, pgp } from "../database/database";
+import { db } from "../database/database";
 import { Employee } from "../database/model/employee";
 import { HttpError } from "../error";
 
-const upsertEmployees = async (employees: Employee[]) => {
+/**
+ * Inserts an array of employees into the database. If id of the inserted
+ * employee already exists, we update the employees instead. This is done
+ * as an atomic transaction so if any insert fails, all inserts are rolledback
+ */
+const addEmployees = async (employees: Employee[]) => {
   return db
     .tx(async (t) => {
       const defer = t.none("SET CONSTRAINTS ALL DEFERRED");
@@ -22,4 +27,4 @@ const upsertEmployees = async (employees: Employee[]) => {
     });
 };
 
-export default upsertEmployees;
+export default addEmployees;
