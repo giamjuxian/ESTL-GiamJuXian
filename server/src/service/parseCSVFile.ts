@@ -29,12 +29,12 @@ export const parseCSVFile = async (
     });
 
     stream.on("end", function () {
-      if (employees.length === 0) reject(new HttpError(422, EMPTY_CSV));
+      if (employees.length === 0) reject(new HttpError(400, EMPTY_CSV));
       resolve(employees);
     });
 
     stream.on("error", (err) => {
-      reject(new HttpError(422, err.message));
+      reject(new HttpError(400, err.message));
     });
 
     stream.on("close", () => {

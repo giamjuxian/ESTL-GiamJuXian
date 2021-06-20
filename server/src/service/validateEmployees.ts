@@ -19,15 +19,15 @@ export const validateEmployees = (data: Employee[]): boolean => {
 
   // Validate for duplicate ids and logins
   data.forEach((employee) => {
-    if (employee.id in idMap) throw new HttpError(422, DUPLICATE_ID);
+    if (employee.id in idMap) throw new HttpError(400, DUPLICATE_ID);
 
-    if (employee.login in loginMap) throw new HttpError(422, DUPLICATE_LOGIN);
+    if (employee.login in loginMap) throw new HttpError(400, DUPLICATE_LOGIN);
 
     if (!/^[+-]?((\d+(\.\d*)?))$/.test(employee.salary))
-      throw new HttpError(422, SALARY_INVALID);
+      throw new HttpError(400, SALARY_INVALID);
 
     if (parseFloat(employee.salary) < 0)
-      throw new HttpError(422, SALARY_NEGATIVE);
+      throw new HttpError(400, SALARY_NEGATIVE);
 
     const stringAfterDecimal = employee.salary.split(".")[1];
     if (
@@ -36,7 +36,7 @@ export const validateEmployees = (data: Employee[]): boolean => {
       stringAfterDecimal.length > 2 ||
       stringAfterDecimal.length < 2
     )
-      throw new HttpError(422, SALARY_WRONG_DECIMAL);
+      throw new HttpError(400, SALARY_WRONG_DECIMAL);
 
     idMap[employee.id] = 1;
     loginMap[employee.login] = 1;
