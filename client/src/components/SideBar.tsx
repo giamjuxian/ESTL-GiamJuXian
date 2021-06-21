@@ -1,11 +1,16 @@
-import React from 'react'
-import profileImage from '../assets/default-profile.jpg'
-import Button from './Button'
+import React from "react";
+import profileImage from "../assets/default-profile.jpg";
+import Button from "./Button";
 
+interface Props {
+  onUploadClick: () => unknown;
+}
 /** Fixed side bar that is only displayed in larger screens */
-export default function SideBar(): JSX.Element {
+export default function SideBar(props: Props): JSX.Element {
+  const { onUploadClick } = props;
+
   return (
-    <div className="sideBar_container d-none d-sm-block">
+    <div className="sideBar_container d-none d-md-block">
       <div className="sideBar_container sideBar_fixed d-flex flex-column align-items-center">
         <div className="py-5 d-flex flex-column align-items-center justify-content-center">
           <img
@@ -15,11 +20,8 @@ export default function SideBar(): JSX.Element {
           />
           <p className="sideBar_profileText">thisismylongusername</p>
         </div>
-        <Button icon="upload" title={'Upload'} onClick={() => {}} />
-        <Button icon="times" title={'Function 2'} onClick={() => {}} />
-        <Button icon="times" title={'Function 3'} onClick={() => {}} />
-        <Button icon="times" title={'Function 4'} onClick={() => {}} />
+        <Button icon="upload" title={"Upload"} onClick={onUploadClick} />
       </div>
     </div>
-  )
+  );
 }

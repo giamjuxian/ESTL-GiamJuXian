@@ -6,6 +6,10 @@
   "author": "Ju Xian Giam <giamjuxian@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "(cd client && yarn run build) && (cd server && yarn start)"
+    "start": "(cd client && yarn run build) && (cd server && yarn start:watch)",
+    "install": "(cd client && yarn install) && (cd server && yarn install)",
+    "first-setup": "cd server && yarn createdb && yarn setup",
+    "test": "cd server && yarn test",
+    "start:client": "cd client && yarn start"
   }
 }

@@ -1,4 +1,8 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faUpload, faTimes } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUpload,
+  faTimes,
+  faAlignJustify,
+} from "@fortawesome/free-solid-svg-icons";
 
-library.add(faUpload, faTimes);
+library.add(faUpload, faTimes, faAlignJustify);
