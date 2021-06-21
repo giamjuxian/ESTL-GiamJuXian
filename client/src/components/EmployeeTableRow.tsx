@@ -15,7 +15,7 @@ interface Props {
   onDelete: (id: string) => unknown;
 }
 
-/** Employee table row which includes action buttons to modify record */
+/** Employee table row which includes action buttons to modify or delete employee */
 export default function EmployeeTableRow(props: Props): JSX.Element {
   const { employee, onEdit, onDelete } = props;
 

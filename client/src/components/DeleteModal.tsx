@@ -10,6 +10,7 @@ interface Props {
   onDelete: (id: string) => unknown;
 }
 
+/** Modal to allow of deleting of an employee */
 export default function DeleteModal(props: Props): JSX.Element {
   const { show, employee, onHide, onDelete } = props;
   const [loading, setLoading] = useState<boolean>(false);

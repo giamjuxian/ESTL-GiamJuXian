@@ -6,6 +6,7 @@ interface Props {
   onSearch: (id: string) => unknown;
 }
 
+/** Section which includes functionalities to search and or create new employees */
 export default function SearchAndCreateSection(props: Props) {
   const { onCreate, onSearch } = props;
   const [searchId, setSearchId] = useState<string>("");

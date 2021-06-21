@@ -21,6 +21,7 @@ enum SortOrder {
   DESC = "DESC",
 }
 
+/** Main page of the web application. Displays the table of employees */
 export default function MainPage(): JSX.Element {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [error, setError] = useState<string | null>(null);

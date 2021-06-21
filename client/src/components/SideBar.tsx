@@ -5,6 +5,7 @@ import Button from "./Button";
 interface Props {
   onUploadClick: () => unknown;
 }
+
 /** Fixed side bar that is only displayed in larger screens */
 export default function SideBar(props: Props): JSX.Element {
   const { onUploadClick } = props;

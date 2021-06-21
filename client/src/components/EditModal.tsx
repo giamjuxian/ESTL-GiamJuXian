@@ -10,6 +10,7 @@ interface Props {
   onEdit: (employee: Employee) => unknown;
 }
 
+/** Modal to edit a current employee */
 export default function EditModal(props: Props): JSX.Element {
   const { show, employee, onHide, onEdit } = props;
   const [loading, setLoading] = useState<boolean>(false);

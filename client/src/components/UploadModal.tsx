@@ -7,6 +7,7 @@ interface Props {
   onHide: () => unknown;
 }
 
+/** Modal to upload CSV files for uploading of employees  */
 export default function UploadModal(props: Props): JSX.Element {
   const { show, onHide } = props;
   const [loading, setLoading] = useState<boolean>(false);
