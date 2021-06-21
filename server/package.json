@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "createdb": "createdb estl && createdb estl-test",
+    "createdb": "createdb estl && createdb estl-test && cat ./src/database/sql/createRole.sql | psql estl && cat ./src/database/sql/createRole.sql | psql estl",
     "setup": "cat ./src/database/sql/employee/create.sql | psql estl && cat ./src/database/sql/employee/create.sql | psql estl-test",
     "start": "tsc && node dist/server.js",
     "start:watch": "nodemon",
