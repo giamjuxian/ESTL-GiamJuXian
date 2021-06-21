@@ -3,9 +3,13 @@ import multer from "multer";
 import { Employee } from "../database/model/employee";
 import { HttpError } from "../error";
 import addEmployees from "../service/addEmployees";
-import getCount from "../service/getCount";
+import createEmployee from "../service/createEmployee";
+import deleteEmployee from "../service/deleteEmployee";
+import getCount, { MISSING_PARAMTERS } from "../service/getCount";
+import getEmployee from "../service/getEmployee";
 import getEmployees from "../service/getEmployees";
 import { parseCSVFile } from "../service/parseCSVFile";
+import updateEmployee from "../service/updateEmployee";
 import { validateEmployees } from "../service/validateEmployees";
 
 const router = express.Router();
@@ -67,6 +71,66 @@ router.get("/count", async (req, res, next) => {
   try {
     const count: number = await getCount(options);
     res.json({ success: true, status: 200, results: count });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get("/:id", async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const employee = await getEmployee(id);
+    res.json({ success: true, status: 200, results: employee });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post("/", async (req, res, next) => {
+  const { id, login, name, salary } = req.body;
+
+  try {
+    if (
+      id === undefined ||
+      login === undefined ||
+      name === undefined ||
+      salary === undefined
+    ) {
+      return next(new HttpError(400, MISSING_PARAMTERS));
+    }
+    const createdId: string = await createEmployee({ id, login, name, salary });
+    res.json({ success: true, status: 200, results: createdId });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.put("/", async (req, res, next) => {
+  const { id, login, name, salary } = req.body;
+
+  try {
+    if (
+      id === undefined ||
+      login === undefined ||
+      name === undefined ||
+      salary === undefined
+    ) {
+      return next(new HttpError(400, MISSING_PARAMTERS));
+    }
+    await updateEmployee({ id, login, name, salary });
+    res.json({ success: true, status: 200 });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.delete("/:id", async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    await deleteEmployee(id);
+    res.json({ success: true, status: 200 });
   } catch (err) {
     next(err);
   }

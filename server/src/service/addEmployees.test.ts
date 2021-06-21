@@ -1,6 +1,6 @@
 import { db } from "../database/database";
 import { Employee } from "../database/model/employee";
-import addEmployees from "./addEmployees";
+import addEmployees, { LOGIN_ALREADY_EXISTS } from "./addEmployees";
 
 describe("addEmployees", () => {
   beforeEach(async () => {
@@ -197,7 +197,7 @@ describe("addEmployees", () => {
     ];
 
     await expect(addEmployees(differentId)).rejects.toThrow(
-      `duplicate key value violates unique constraint "employees_login_key"`
+      LOGIN_ALREADY_EXISTS
     );
   });
 
@@ -235,7 +235,7 @@ describe("addEmployees", () => {
     ];
 
     await expect(addEmployees(differentId)).rejects.toThrow(
-      `duplicate key value violates unique constraint "employees_login_key"`
+      LOGIN_ALREADY_EXISTS
     );
 
     const created = await Promise.all([

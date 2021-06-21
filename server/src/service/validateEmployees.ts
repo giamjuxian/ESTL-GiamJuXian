@@ -23,24 +23,31 @@ export const validateEmployees = (data: Employee[]): boolean => {
 
     if (employee.login in loginMap) throw new HttpError(400, DUPLICATE_LOGIN);
 
-    if (!/^[+-]?((\d+(\.\d*)?))$/.test(employee.salary))
-      throw new HttpError(400, SALARY_INVALID);
-
-    if (parseFloat(employee.salary) < 0)
-      throw new HttpError(400, SALARY_NEGATIVE);
-
-    const stringAfterDecimal = employee.salary.split(".")[1];
-    if (
-      !stringAfterDecimal ||
-      stringAfterDecimal.length === 0 ||
-      stringAfterDecimal.length > 2 ||
-      stringAfterDecimal.length < 2
-    )
-      throw new HttpError(400, SALARY_WRONG_DECIMAL);
+    validateEmployee(employee);
 
     idMap[employee.id] = 1;
     loginMap[employee.login] = 1;
   });
+
+  return true;
+};
+
+/** Validates an individual employee based on the salary */
+export const validateEmployee = (employee: Employee): boolean => {
+  if (!/^[+-]?((\d+(\.\d*)?))$/.test(employee.salary))
+    throw new HttpError(400, SALARY_INVALID);
+
+  if (parseFloat(employee.salary) < 0)
+    throw new HttpError(400, SALARY_NEGATIVE);
+
+  const stringAfterDecimal = employee.salary.split(".")[1];
+  if (
+    !stringAfterDecimal ||
+    stringAfterDecimal.length === 0 ||
+    stringAfterDecimal.length > 2 ||
+    stringAfterDecimal.length < 2
+  )
+    throw new HttpError(400, SALARY_WRONG_DECIMAL);
 
   return true;
 };

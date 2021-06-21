@@ -2,6 +2,7 @@ import { db } from "../database/database";
 import { Employee } from "../database/model/employee";
 import { HttpError } from "../error";
 
+export const LOGIN_ALREADY_EXISTS = "Login already exists";
 /**
  * Inserts an array of employees into the database. If id of the inserted
  * employee already exists, we update the employees instead. This is done
@@ -23,7 +24,13 @@ const addEmployees = async (employees: Employee[]) => {
       return t.batch([defer, ...queries]);
     })
     .catch((err) => {
-      throw new HttpError(500, err.message);
+      if (
+        err.message ===
+        `duplicate key value violates unique constraint "employees_login_key"`
+      ) {
+        throw new HttpError(400, LOGIN_ALREADY_EXISTS);
+      }
+      throw new HttpError(400, err.message);
     });
 };
 
