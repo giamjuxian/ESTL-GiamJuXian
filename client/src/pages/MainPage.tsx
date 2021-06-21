@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Dropdown, Button, Pagination } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Pagination } from "react-bootstrap";
 import { APIType, fetchAPI } from "../api";
 import EmployeeTable from "../components/EmployeeTable";
 import { Employee } from "../components/EmployeeTableRow";
+import EditModal from "../components/EditModal";
+import DeleteModal from "../components/DeleteModal";
+import CreateModal from "../components/CreateModal";
+import FilterSection from "../components/FilterSection";
+import SearchAndCreateSection from "../components/SearchAndCreateSection";
 
 enum SortParam {
   id = "ID",
@@ -23,8 +28,12 @@ export default function MainPage(): JSX.Element {
   const [maxSalary, setMaxSalary] = useState<number | undefined>(undefined);
   const [sortParams, setSortParams] = useState<SortParam>(SortParam.id);
   const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.ASC);
-  const [pageCount, setPageCount] = useState<number>(5);
+  const [pageCount, setPageCount] = useState<number>(0);
   const [pageActive, setPageActive] = useState<number>(1);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [showEditModal, setShowEditModal] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
 
   useEffect(() => {
     getEmployees();
@@ -83,84 +92,86 @@ export default function MainPage(): JSX.Element {
     setPageActive(index);
   };
 
-  const renderFilterSection = () => (
-    <div className="d-flex flex-column">
-      <div className="d-flex flex-row">
-        <div className="d-flex flex-column">
-          <div className="input_header mt-2 mb-1">Salary</div>
-          <div className="d-flex flex-row align-items-center">
-            <input
-              type="number"
-              placeholder="min"
-              value={minSalary || ""}
-              onChange={(e) => setMinSalary(parseFloat(e.target.value))}
-            />
-            <div className="m-2">to</div>
-            <input
-              type="number"
-              placeholder="max"
-              value={maxSalary || ""}
-              onChange={(e) => setMaxSalary(parseFloat(e.target.value))}
-            />
-          </div>
-        </div>
-        <div className="d-flex flex-column mx-5">
-          <div className="input_header mt-2 mb-1">Sorting</div>
-          <div className="d-flex flex-row">
-            <Dropdown>
-              <Dropdown.Toggle variant="outline-secondary">
-                {sortParams}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item onSelect={() => setSortParams(SortParam.id)}>
-                  ID
-                </Dropdown.Item>
-                <Dropdown.Item onSelect={() => setSortParams(SortParam.login)}>
-                  Login
-                </Dropdown.Item>
-                <Dropdown.Item onSelect={() => setSortParams(SortParam.name)}>
-                  Name
-                </Dropdown.Item>
-                <Dropdown.Item onSelect={() => setSortParams(SortParam.salary)}>
-                  Salary
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown className="mx-2">
-              <Dropdown.Toggle variant="outline-secondary">
-                {sortOrder}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item onSelect={() => setSortOrder(SortOrder.ASC)}>
-                  Ascending
-                </Dropdown.Item>
-                <Dropdown.Item onSelect={() => setSortOrder(SortOrder.DESC)}>
-                  Descending
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-        </div>
-      </div>
+  const handleEditButtonClick = (id: string) => {
+    setSelectedId(id);
+    setShowEditModal(true);
+  };
 
-      <div className="d-flex flex-row mt-4">
-        <Button onClick={() => handleFilter()} variant="primary">
-          Filter
-        </Button>
-        <Button
-          className="mx-2"
-          onClick={() => handleFilterClear()}
-          variant="outline-secondary"
-        >
-          Clear
-        </Button>
-      </div>
-    </div>
+  const handleDeleteButtonClick = (id: string) => {
+    setSelectedId(id);
+    setShowDeleteModal(true);
+  };
+
+  const handleCreate = (employee: Employee) => {
+    const newEmployees = employees;
+    newEmployees.unshift(employee);
+    setEmployees(newEmployees);
+  };
+
+  const handleEdit = (employee: Employee) => {
+    setEmployees(
+      employees.map((e) => {
+        if (e.id === employee.id) {
+          return employee;
+        }
+        return e;
+      })
+    );
+  };
+
+  const handleDelete = (id: string) => {
+    setEmployees(employees.filter((e) => e.id !== id));
+  };
+
+  const handleSearch = async (id: string) => {
+    setError(null);
+    try {
+      const result: Employee | null = await fetchAPI<Employee>({
+        url: `/users/${id}`,
+        type: APIType.get,
+      });
+
+      if (result) {
+        setEmployees([result]);
+      } else {
+        setEmployees([]);
+        setError("No employees found");
+      }
+    } catch (err) {
+      setEmployees([]);
+      setError(err.message);
+    }
+  };
+
+  const renderSearchAndCreateSection = () => (
+    <SearchAndCreateSection
+      onCreate={() => setShowCreateModal(true)}
+      onSearch={handleSearch}
+    />
+  );
+
+  const renderFilterSection = () => (
+    <FilterSection
+      minSalary={minSalary}
+      maxSalary={maxSalary}
+      sortParams={sortParams}
+      sortOrder={sortOrder}
+      onMinSalaryChange={(value) => setMinSalary(value)}
+      onMaxSalaryChange={(value) => setMaxSalary(value)}
+      onSortParamChange={(value) => setSortParams(value)}
+      onSortOrderChange={(value) => setSortOrder(value)}
+      onFilter={handleFilter}
+      onFilterClear={handleFilterClear}
+    />
   );
 
   const renderEmployeeTable = () => (
     <>
-      <EmployeeTable employees={employees} />
+      <EmployeeTable
+        employees={employees}
+        onEdit={handleEditButtonClick}
+        onDelete={handleDeleteButtonClick}
+      />
       {error && <p className="error">{error}</p>}
     </>
   );
@@ -221,11 +232,47 @@ export default function MainPage(): JSX.Element {
     );
   };
 
+  const renderModals = () => {
+    const employee = employees.find((e) => e.id === selectedId);
+    return (
+      <>
+        {employee && (
+          <>
+            <EditModal
+              employee={employee}
+              show={showEditModal}
+              onEdit={handleEdit}
+              onHide={() => setShowEditModal(false)}
+            />
+
+            <DeleteModal
+              employee={employee}
+              show={showDeleteModal}
+              onDelete={handleDelete}
+              onHide={() => setShowDeleteModal(false)}
+            />
+          </>
+        )}
+        <CreateModal
+          show={showCreateModal}
+          onCreate={handleCreate}
+          onHide={() => setShowCreateModal(false)}
+        />
+      </>
+    );
+  };
+
   return (
     <div className="flex-grow-1 px-4 py-5">
-      {renderFilterSection()}
+      <div className="row mt-3">
+        <div className="col-md-12 col-lg-6">
+          {renderSearchAndCreateSection()}
+        </div>
+        <div className="col-md-12 col-lg-6">{renderFilterSection()}</div>
+      </div>
       {renderEmployeeTable()}
       {renderPagination()}
+      {renderModals()}
     </div>
   );
 }

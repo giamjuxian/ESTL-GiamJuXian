@@ -20,6 +20,7 @@ export enum APIType {
   get = "get",
   post = "post",
   put = "put",
+  delete = "delete",
 }
 
 export async function fetchAPI<T>(
@@ -39,6 +40,9 @@ export async function fetchAPI<T>(
         break;
       case APIType.put:
         response = await instance.put<APIData<T>>(url, body, config);
+        break;
+      case APIType.delete:
+        response = await instance.delete<APIData<T>>(url, body);
         break;
     }
     return response.data && response.data.results;

@@ -3,6 +3,8 @@ import {
   faUpload,
   faTimes,
   faAlignJustify,
+  faPen,
+  faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faUpload, faTimes, faAlignJustify);
+library.add(faUpload, faTimes, faAlignJustify, faPen, faTrashAlt);

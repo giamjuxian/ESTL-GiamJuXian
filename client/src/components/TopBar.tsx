@@ -11,7 +11,7 @@ export default function TopBar(props: Props) {
   const { onUploadClick } = props;
 
   return (
-    <div className="topBar_container d-xs-inline d-md-none">
+    <div className="topBar_container d-xs-inline d-lg-none">
       <Dropdown>
         <Dropdown.Toggle
           className="m-2 d-flex flex-row align-items-center"
